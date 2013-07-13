@@ -4,7 +4,7 @@
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Responsive Grids – Pure</title>
+    <title>Create Your Itenary</title>
 
 
 <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true&libraries=places"></script>
@@ -13,6 +13,8 @@
 <script src="{{ url_for('static',filename='bootstrap/js/bootstrap.min.js') }}"></script>
 
 <link rel="stylesheet" href="{{ url_for('static',filename='pure-min.css')}}">
+
+
 
 <script src="{{url_for('static',filename='map.js') }}"></script>
 <script src="{{url_for('static',filename='infobox.js')}}"></script>
@@ -56,7 +58,7 @@ ga('send', 'pageview');
 <!-- Sidebar -->
 <div class="pure-u" id="menu">
     <div class="pure-menu pure-menu-open">
-        <a class="pure-menu-heading" href="http://purecss.io/">Pure</a>
+        <a class="pure-menu-heading" href="{{ url_for ('timeline') }}">Timeline</a>
 
         <ul>
           
@@ -65,50 +67,7 @@ ga('send', 'pageview');
                 
             </li>
           
-            <li class="pure-menu-selected ">
-                <a href="http://purecss.io/grids/">Grids</a>
-            </li>
-          
-            <li class=" ">
-                <a href="http://purecss.io/forms/">Forms</a>
-            </li>
-          
-            <li class=" ">
-                <a href="http://purecss.io/buttons/">Buttons</a>
-            </li>
-          
-            <li class=" ">
-                <a href="http://purecss.io/tables/">Tables</a>
-            </li>
-          
-            <li class=" ">
-                <a href="http://purecss.io/menus/">Menus</a>
-            </li>
-          
-            <li class=" menu-item-divided">
-                <a href="http://purecss.io/customize/">Customize</a>
-            </li>
-          
-            <li class=" ">
-                <a href="http://purecss.io/extend/">Extend</a>
-            </li>
-          
-            <li class=" ">
-                <a href="http://purecss.io/layouts/">Layouts</a>
-            </li>
-          
-            <li class=" ">
-                <a href="http://purecss.io/updates/">Updates</a>
-            </li>
-          
-
-            <li class="menu-item-divided">
-                <a href="http://yui.github.io/skinbuilder/?mode=pure">Skin Builder</a>
-            </li>
-
-            <li>
-                <a href="http://yuilibrary.com/">YUI Library</a>
-            </li>
+            
         </ul>
     </div>
 </div>
@@ -161,38 +120,35 @@ ga('send', 'pageview');
 
                             <form class="pure-form pure-form-stacked">
                             <fieldset>
-                                <input class="city" type="text" placeholder="CITY NAME" id = "city-name" style="height:25px;">
+                                <input class="city" type="text" placeholder="CITY NAME" id = "city-name-input0" style="height:25px;">
                             </fieldset>
                             </form>
                         </div>
                     </div>
-                            <a href="#"><img src="{{ url_for ('static',filename='Add.png') }}" id="add" alt="Add" width="20" height="20" /></a>
-                            <a href="#"><img src="{{ url_for ('static',filename='Delete.png') }}" id="del" alt="Add" width="20" height="20"/></a>
+                    <div>
+                            
+                            
+                    </div>
+                    <div class="pure-g-r">
+                        <div class = "pure-u-1-3">
+                            <a href="#"><i class = "icon-plus-sign-alt" id="add" alt="Add" width="20" height="20" > </i>
+                            <a href="#"><i class = "icon-minus-sign-alt" id="del" alt="Add" width="20" height="20"/></i>
+                        </div>
+                        <div class = "pure-u-1-3">
+
+                        </div>
+                        <div class = "pure-u-1-3">
+                            <button onclick= "add_itenary()" class="pure-button pure-button-primary">Done</button>
+                        </div>
+
+                    </div>
+
                 </div>
             </div>
-	<h1 class="pure-u-1">Responsive Grids</h1>
+	<h1 class="pure-u-1"> </h1>
 	<script type=text/javascript>
 	$SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
 	</script>
-	<script type=text/javascript>
-		$(function() {
-			$('a#calculate').bind('click', function() {
-				$.getJSON($SCRIPT_ROOT + '/add_element', {
-					a: $('input[name="a"]').val(),
-					b: $('input[name="b"]').val()
-					}, function(data) {
-				$("#result").text(data.result);
-				});
-				return false;
-			});
-		});
-	</script>
-	<p><input type=text size=5 name=a> +
-	   <input type=text size=5 name=b> =
-	   <span id=result>?</span>
-	 <p><a href=# id=calculate>calculate server side</a>
-    <input type="text" id="target">
-
   
     <h2 class="pure-u">A fully customizable responsive grid</h2>
     <div class="pure-g" id = "myMap">
@@ -233,7 +189,7 @@ ga('send', 'pageview');
         <div class="l-box">
             <ul class="legal-links pure-g">
                 <li class="pure-u-1-2">
-                    <a href="https://github.com/yui/pure/">GitHub Project</a>
+                    <a href="https://github.com/somayjain/yhack13/" target = "_blank">GitHub Project</a>
                 </li>
                 <li class="pure-u-1-2">
                     <a href="http://yuilibrary.com/security/">Security Contact Info</a>

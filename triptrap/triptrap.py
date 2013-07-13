@@ -91,7 +91,7 @@ def before_request():
                           [session['user_id']], one=True)
 
 
-@app.route('/')
+@app.route('/timeline')
 def timeline():
     """Shows a users timeline or if no user is logged in it will
     redirect to the public timeline.  This timeline shows the user's
@@ -170,8 +170,16 @@ def unfollow_user(username):
     flash('You are no longer following "%s"' % username)
     return redirect(url_for('user_timeline', username=username))
 
+@app.route('/map', methods=['GET'])
+def go_to_map():
+    """
+        Go to map form share page.
+    """
+    return render_template('hack.html')
+
+
 # TODO : change the method to POST
-@app.route('/add_message', methods=['GET'])
+@app.route('/add_message')
 def add_message():
     """Registers a new message for the user."""
     if 'user_id' not in session:
@@ -184,7 +192,8 @@ def add_message():
         db.commit()
 	message_id = query_db('''select message.message_id from message where author_id = ? order by message.message_id desc limit ?''',[session['user_id'],1])
 	session['message_id'] = message_id[0][0]
-    return render_template('hack.html')
+    #return render_template('hack.html')
+    return jsonify(result=session['message_id'])
 
 
 @app.route('/add_element')
@@ -193,17 +202,17 @@ def add_element():
     if 'user_id' not in session:
         abort(401)
     else:
-	lat = request.args.get('a', 0, type=int)
-	lng = request.args.get('b', 0, type=int)
+        lat = request.args.get('a', "0", type=str)
+        lng = request.args.get('b', "0", type=str)
         db = get_db()
         db.execute('''insert into element (message_id, lat, lng)
-          values (?, ?, ?)''', (session['message_id'],lat,
+values (?, ?, ?)''', (session['message_id'],lat,
                                 lng))
         db.commit()
-	return jsonify(result=session['message_id'])
+    return jsonify(result=session['message_id'])
 
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
 def login():
     """Logs the user in."""
     if g.user:
