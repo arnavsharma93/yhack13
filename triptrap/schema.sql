@@ -26,7 +26,6 @@ create table element (
   message_id integer not null,
   lat text not null,
   lng text not null,
-  start_time text,
-  end_time text
+  duration text
 );
 

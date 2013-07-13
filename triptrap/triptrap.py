@@ -211,6 +211,23 @@ values (?, ?, ?)''', (session['message_id'],lat,
         db.commit()
     return jsonify(result=session['message_id'])
 
+    
+
+@app.route('/del_element')
+def del_element():
+    """Deletes an element for the message."""
+    if 'user_id' not in session:
+        abort(401)
+    else:
+        lat = request.args.get('a', "0", type=str)
+        lng = request.args.get('b', "0", type=str)
+        db = get_db()
+        db.execute('''delete from element where element.lat = ? and element.lng = ?''', (lat,lng))
+        db.commit()
+        return jsonify(result=session['message_id'])
+
+
+
 
 @app.route('/', methods=['GET', 'POST'])
 def login():
