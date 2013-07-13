@@ -170,7 +170,7 @@
 }
 #sign_in1 .dosnt a:hover,
 #sign_in1 .remember a:hover{
-    color:#252528;
+    /*color:#252528;*/
     border-color: #252528;
 }
 

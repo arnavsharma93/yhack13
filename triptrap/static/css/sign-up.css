@@ -146,7 +146,7 @@
 }
 #sign_up1 .dosnt a:hover,
 #sign_up1 .remember a:hover{
-	color:#252528;
+	/*color:#252528;*/
 	border-color: #252528;
     -webkit-transition: all .2s;
     -moz-transition: all .2s;
