@@ -1,54 +1,230 @@
 {% extends "layout.html" %}
-{% block title %}
-  {% if request.endpoint == 'public_timeline' %}
-    Public Timeline
-  {% elif request.endpoint == 'user_timeline' %}
-    {{ profile_user.username }}'s Timeline
-  {% else %}
-    My Timeline
-  {% endif %}
-{% endblock %}
-{% block body %}
-  <h2>{{ self.title() }}</h2>
-  {% if g.user %}
-    {% if request.endpoint == 'user_timeline' %}
-      <div class=followstatus>
-      {% if g.user.user_id == profile_user.user_id %}
-        This is you!
-      {% elif followed %}
-        You are currently following this user.
-        <a class=unfollow href="{{ url_for('unfollow_user', username=profile_user.username)
-          }}">Unfollow user</a>.
-      {% else %}
-        You are not yet following this user.
-        <a class=follow href="{{ url_for('follow_user', username=profile_user.username)
-          }}">Follow user</a>.
-      {% endif %}
-      </div>
-    {% elif request.endpoint == 'timeline' %}
-      <div class=twitbox>
-        <h3>What's on your mind {{ g.user.username }}?</h3>
-        <form action="{{ url_for('add_message') }}" method=post>
-          <p><input type=text name=text size=60>
-	  <input type=submit value="Share">
-        </form>
-        <form action="{{ url_for('add_element') }}" method=post>
-          <input type=text name=lat size=60>
-          <input type=text name=lng size=60>
-	  <input type=submit value="Share">
-        </form>
-      </div>
-    {% endif %}
-  {% endif %}
-  <ul class=messages>
-  {% for message in messages %}
-    <li><img src="{{ message.email|gravatar(size=48) }}"><p>
-      <strong><a href="{{ url_for('user_timeline', username=message.username)
-      }}">{{ message.username }}</a></strong>
-      {{ message.text }}
-      <small>&mdash; {{ message.pub_date|datetimeformat }}</small>
-  {% else %}
-    <li><em>There's no message so far.</em>
-  {% endfor %}
-  </ul>
-{% endblock %}
+{%block navbar%} {{ super() }} {%endblock%}
+{% block content %}
+    <div id="blog">
+        <div class="container">
+            <div class="section_header">
+                <h3>Blog</h3>
+
+                <input type="text" class="input-large search-query" placeholder="Search">
+            </div>
+
+            <!-- Post Row -->
+            <div class="row post_row">
+                <!-- Post -->
+                <div class="span4 post">
+                    <div class="img">
+                        <a href="http://cleancanvas.herokuapp.com/blogpost.html">
+                            <img src="blog1.png" alt="">
+                        </a>
+                    </div>
+                    <div class="text">
+                        <h5><a href="http://cleancanvas.herokuapp.com/blogpost.html">Clean Canvas beautiful responsive theme.</a></h5>
+                        <span class="date">Wed, 12 Dec.</span>
+                        <p>
+                            There are many variations of passages of generators on the  embarrassing hidden in  slightly distracted by these distribution of letters, as opposed.</p>
+                    </div>
+                    <div class="author_box">
+                        <h6>Alejandra Galvan</h6>
+                        <p>Creative Director</p>
+                    </div>
+                    <a class="plus_wrapper" href="http://cleancanvas.herokuapp.com/blogpost.html">
+                        <span>+</span>
+                    </a>
+                </div>
+
+                <!-- Post -->
+                <div class="span4 post">
+<!--                     <div class="img">
+                        <a href="http://cleancanvas.herokuapp.com/blogpost.html">
+                            <img src="blog2.png" alt="">
+                        </a>
+                    </div>
+ -->                    <div class="text">
+                        <h5><a href="http://cleancanvas.herokuapp.com/blogpost.html">Clean Canvas beautiful responsive theme.</a></h5>
+                        <span class="date">Wed, 12 Dec.</span>
+                        <p>
+                            There are many variations of passages of generators on the  embarrassing hidden in  slightly distracted by these distribution of letters, as opposed.</p>
+                    </div>
+                    <div class="author_box">
+                        <h6>Alejandra Galvan</h6>
+                        <p>Creative Director</p>
+                    </div>
+                    <a class="plus_wrapper" href="http://cleancanvas.herokuapp.com/blogpost.html">
+                        <span>+</span>
+                    </a>
+                </div>
+
+                <!-- Post -->
+                <div class="span4 post last">
+                    <div class="img">
+                        <a href="http://cleancanvas.herokuapp.com/blogpost.html">
+                            <img src="blog3.png" alt="">
+                        </a>
+                    </div>
+                    <div class="text">
+                        <h5><a href="http://cleancanvas.herokuapp.com/blogpost.html">Clean Canvas beautiful responsive theme.</a></h5>
+                        <span class="date">Wed, 12 Dec.</span>
+                        <p>
+                            There are many variations of passages of generators on the  embarrassing hidden in  slightly distracted by these distribution of letters, as opposed.</p>
+                    </div>
+                    <div class="author_box">
+                        <h6>Alejandra Galvan</h6>
+                        <p>Creative Director</p>
+                    </div>
+                    <a class="plus_wrapper" href="http://cleancanvas.herokuapp.com/blogpost.html">
+                        <span>+</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Post Row -->
+            <div class="row post_row">
+                <!-- Post -->
+                <div class="span4 post">
+                    <div class="img">
+                        <a href="http://cleancanvas.herokuapp.com/blogpost.html">
+                            <img src="blog1.png" alt="">
+                        </a>
+                    </div>
+                    <div class="text">
+                        <h5><a href="http://cleancanvas.herokuapp.com/blogpost.html">Clean Canvas beautiful responsive theme.</a></h5>
+                        <span class="date">Wed, 12 Dec.</span>
+                        <p>
+                            There are many variations of passages of generators on the  embarrassing hidden in  slightly distracted by these distribution of letters, as opposed.</p>
+                    </div>
+                    <div class="author_box">
+                        <h6>Alejandra Galvan</h6>
+                        <p>Creative Director</p>
+                    </div>
+                    <a class="plus_wrapper" href="http://cleancanvas.herokuapp.com/blogpost.html">
+                        <span>+</span>
+                    </a>
+                </div>
+
+                <!-- Post -->
+                <div class="span4 post">
+                    <div class="img">
+                        <a href="http://cleancanvas.herokuapp.com/blogpost.html">
+                            <img src="blog2.png" alt="">
+                        </a>
+                    </div>
+                    <div class="text">
+                        <h5><a href="http://cleancanvas.herokuapp.com/blogpost.html">Clean Canvas beautiful responsive theme.</a></h5>
+                        <span class="date">Wed, 12 Dec.</span>
+                        <p>
+                            There are many variations of passages of generators on the  embarrassing hidden in  slightly distracted by these distribution of letters, as opposed.</p>
+                    </div>
+                    <div class="author_box">
+                        <h6>Alejandra Galvan</h6>
+                        <p>Creative Director</p>
+                    </div>
+                    <a class="plus_wrapper" href="http://cleancanvas.herokuapp.com/blogpost.html">
+                        <span>+</span>
+                    </a>
+                </div>
+
+                <!-- Post -->
+                <div class="span4 post last">
+                    <div class="img">
+                        <a href="http://cleancanvas.herokuapp.com/blogpost.html">
+                            <img src="blog3.png" alt="">
+                        </a>
+                    </div>
+                    <div class="text">
+                        <h5><a href="http://cleancanvas.herokuapp.com/blogpost.html">Clean Canvas beautiful responsive theme.</a></h5>
+                        <span class="date">Wed, 12 Dec.</span>
+                        <p>
+                            There are many variations of passages of generators on the  embarrassing hidden in  slightly distracted by these distribution of letters, as opposed.</p>
+                    </div>
+                    <div class="author_box">
+                        <h6>Alejandra Galvan</h6>
+                        <p>Creative Director</p>
+                    </div>
+                    <a class="plus_wrapper" href="http://cleancanvas.herokuapp.com/blogpost.html">
+                        <span>+</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Post Row -->
+            <div class="row post_row lastpost_row">
+                <!-- Post -->
+                <div class="span4 post">
+                    <div class="img">
+                        <a href="http://cleancanvas.herokuapp.com/blogpost.html">
+                            <img src="blog1.png" alt="">
+                        </a>
+                    </div>
+                    <div class="text">
+                        <h5><a href="http://cleancanvas.herokuapp.com/blogpost.html">Clean Canvas beautiful responsive theme.</a></h5>
+                        <span class="date">Wed, 12 Dec.</span>
+                        <p>
+                            There are many variations of passages of generators on the  embarrassing hidden in  slightly distracted by these distribution of letters, as opposed.</p>
+                    </div>
+                   <div class="author_box">
+                        <h6>Alejandra Galvan</h6>
+                        <p>Creative Director</p>
+                    </div>
+                    <a class="plus_wrapper" href="http://cleancanvas.herokuapp.com/blogpost.html">
+                        <span>+</span>
+                    </a>
+                </div>
+
+                <!-- Post -->
+                <div class="span4 post">
+                    <div class="img">
+                        <a href="http://cleancanvas.herokuapp.com/blogpost.html">
+                            <img src="blog2.png" alt="">
+                        </a>
+                    </div>
+                    <div class="text">
+                        <h5><a href="http://cleancanvas.herokuapp.com/blogpost.html">Clean Canvas beautiful responsive theme.</a></h5>
+                        <span class="date">Wed, 12 Dec.</span>
+                        <p>
+                            There are many variations of passages of generators on the  embarrassing hidden in  slightly distracted by these distribution of letters, as opposed.</p>
+                    </div>
+                   <div class="author_box">
+                        <h6>Alejandra Galvan</h6>
+                        <p>Creative Director</p>
+                    </div>
+                    <a class="plus_wrapper" href="http://cleancanvas.herokuapp.com/blogpost.html">
+                        <span>+</span>
+                    </a>
+                </div>
+
+                <!-- Post -->
+                <div class="span4 post last">
+                    <div class="img">
+                        <a href="http://cleancanvas.herokuapp.com/blogpost.html">
+                            <img src="blog3.png" alt="">
+                        </a>
+                    </div>
+                    <div class="text">
+                        <h5><a href="http://cleancanvas.herokuapp.com/blogpost.html">Clean Canvas beautiful responsive theme.</a></h5>
+                        <span class="date">Wed, 12 Dec.</span>
+                        <p>
+                           There are many variations of passages of generators on the  embarrassing hidden in  slightly distracted by these distribution of letters, as opposed.</p>
+                    </div>
+                    <div class="author_box">
+                        <h6>Alejandra Galvan</h6>
+                        <p>Creative Director</p>
+                    </div>
+                    <a class="plus_wrapper" href="http://cleancanvas.herokuapp.com/blogpost.html">
+                        <span>+</span>
+                    </a>
+                </div>
+            </div>
+            <div class="pagination">
+                <ul>
+                    <li><a href="http://cleancanvas.herokuapp.com/blog.html#">Prev</a></li>
+                    <li><a href="http://cleancanvas.herokuapp.com/blog.html#">1</a></li>
+                    <li><a href="http://cleancanvas.herokuapp.com/blog.html#">2</a></li>
+                    <li><a href="http://cleancanvas.herokuapp.com/blog.html#">3</a></li>
+                    <li><a href="http://cleancanvas.herokuapp.com/blog.html#">4</a></li>
+                    <li><a href="http://cleancanvas.herokuapp.com/blog.html#">Next</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+{%endblock%}

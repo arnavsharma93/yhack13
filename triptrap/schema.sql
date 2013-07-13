@@ -16,7 +16,8 @@ drop table if exists message;
 create table message (
   message_id integer primary key autoincrement,
   author_id integer not null,
-  pub_date integer
+  pub_date integer,
+  votes integer
 );
 
 drop table if exists element;
@@ -26,6 +27,6 @@ create table element (
   lat text not null,
   lng text not null,
   start_time text,
-  end_time text 
+  end_time text
 );
 
