@@ -1,0 +1,64 @@
+{% extends "layout.html" %}
+{%block navbar%} {{ super() }} {%endblock%}
+{% block content %}
+    <div id="sign_up1">
+        <div class="container">
+            <div class="row">
+                <div class="span12 header">
+                    <h4>Create your account</h4>
+                    <p>
+                        There are many variations of passages of Lorem alteration in some form  injected humour these randomised words .</p>
+
+                    <div class="span4 social">
+                        <a href="" class="circle facebook">
+                            <img src="static/img/face.png" height="28" width="14" alt="">
+                        </a>
+                         <a href="" class="circle twitter">
+                            <img src="static/img/twt.png" height="24" width="34" alt="">
+                        </a>
+                         <a href="" class="circle gplus">
+                            <img src="static/img/gplus.png" height="27" width="17" alt="">
+                        </a>
+                    </div>
+                </div>
+
+                <div class="span3 division">
+                    <div class="line l"></div>
+                    <span>or</span>
+                    <div class="line r"></div>
+                </div>
+
+                <div class="span12 footer">
+                    <form method=post action="">
+                      <dl>
+                        <input type="text" placeholder="Email" name=email size=30 value="{{ request.form.email }}">
+                        <input type="text" placeholder=Username name=username size=30 value="{{ request.form.username }}">
+                        <input type="password" placeholder="Password"  name=password size=30>
+                        <input type="password" placeholder="Confirm Password" name=password2 size=30>
+                        <input type="submit"  value="Sign up">
+                    </dl>
+                    </form>
+                </div>
+
+                <div class="span12 dosnt">
+                    <span>Already have an account?</span>
+                    <a href="sign-in.html">Sign in</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+<!-- {# footer starting #} -->
+    {%block footer%}
+    {{ super() }}
+    {% endblock %}
+
+    {%block jsfiles%}
+    {{ super() }}
+    {% endblock %}
+
+
+</body>
+</html>
+

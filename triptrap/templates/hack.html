@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html class="wf-omnespro-n2-active wf-omnespro-n3-active wf-proximanova-n1-active wf-proximanova-n4-active wf-proximanova-n7-active wf-active" lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Responsive Grids – Pure</title>
+
+
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true&libraries=places"></script>
+<script src="http://code.jquery.com/jquery.js"></script>
+<link href=" {{ url_for('static',filename='bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" media="screen">
+<script src="{{ url_for('static',filename='bootstrap/js/bootstrap.min.js') }}"></script>
+
+<link rel="stylesheet" href="{{ url_for('static',filename='pure-min.css')}}">
+
+<script src="{{url_for('static',filename='map.js') }}"></script>
+<script src="{{url_for('static',filename='infobox.js')}}"></script>
+
+<link rel="stylesheet" href="{{url_for('static',filename='1.css')}}">
+
+<script src="{{url_for('static',filename='donuts.js')}}"></script>
+<link rel="stylesheet" href="{{url_for('static',filename='donuts.css')}}">
+
+    
+<script src="{{url_for('static',filename='analytics.js')}}" async=""></script><script src="{{url_for('static',filename='ajf8ggy.js')}}"></script>
+<style type="text/css">.demo-unit,.tk-proxima-nova,body,h2,h3{font-family:"proxima-nova",sans-serif;}.header h1,.hero h1,.hero h2,.tk-omnes-pro{font-family:"omnes-pro",sans-serif;}</style><link href="{{url_for('static',filename='d.html')}}" rel="stylesheet"><script>
+    try { Typekit.load(); } catch (e) {}
+</script>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="{{
+		  url_for('static', filename='jquery.js') }}">\x3C/script>')</script>
+    
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-41480445-1', 'purecss.io');
+ga('send', 'pageview');
+</script>
+
+
+
+
+</head>
+<body onload="initialize()">
+
+    <div class="pure-g-r " id="layout">
+        <a href="#menu" id="menuLink" class="pure-menu-link">
+    <img src="{{ url_for ('static',filename='navicon-png2x.png') }}" alt="Menu toggle" width="20">
+</a>
+
+<!-- Sidebar -->
+<div class="pure-u" id="menu">
+    <div class="pure-menu pure-menu-open">
+        <a class="pure-menu-heading" href="http://purecss.io/">Pure</a>
+
+        <ul>
+          
+            <li class="add-itenary slideout">
+                <a href="#myModal">New Itenary</a>
+                
+            </li>
+          
+            <li class="pure-menu-selected ">
+                <a href="http://purecss.io/grids/">Grids</a>
+            </li>
+          
+            <li class=" ">
+                <a href="http://purecss.io/forms/">Forms</a>
+            </li>
+          
+            <li class=" ">
+                <a href="http://purecss.io/buttons/">Buttons</a>
+            </li>
+          
+            <li class=" ">
+                <a href="http://purecss.io/tables/">Tables</a>
+            </li>
+          
+            <li class=" ">
+                <a href="http://purecss.io/menus/">Menus</a>
+            </li>
+          
+            <li class=" menu-item-divided">
+                <a href="http://purecss.io/customize/">Customize</a>
+            </li>
+          
+            <li class=" ">
+                <a href="http://purecss.io/extend/">Extend</a>
+            </li>
+          
+            <li class=" ">
+                <a href="http://purecss.io/layouts/">Layouts</a>
+            </li>
+          
+            <li class=" ">
+                <a href="http://purecss.io/updates/">Updates</a>
+            </li>
+          
+
+            <li class="menu-item-divided">
+                <a href="http://yui.github.io/skinbuilder/?mode=pure">Skin Builder</a>
+            </li>
+
+            <li>
+                <a href="http://yuilibrary.com/">YUI Library</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+
+        <div class="pure-u" id="main">
+
+            
+
+
+
+	<div class="header pure-u-1">
+        <div style="position: static;" class="navbar navbar-inverse">
+              <div class="navbar-inner">
+                <div class="container">
+                  <a data-target=".navbar-inverse-collapse" data-toggle="collapse" class="btn btn-navbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                  </a>
+                  
+                  <div class="nav-collapse collapse navbar-inverse-collapse">
+                    <form action="" class="navbar-search pull-left">
+                        <label for="target"><i class="nav-search-icon"></i></label>
+                        <input type="text" placeholder="Search" class="search-query span2 place-search" id = "target">
+
+                      
+                    </form>
+                    <ul class="nav pull-right">
+                      <li><a href="#">Link</a></li>
+                      <li class="divider-vertical"></li>
+                      <li class="dropdown">
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">Dropdown <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                          <li><a href="#">Action</a></li>
+                          <li><a href="#">Another action</a></li>
+                          <li><a href="#">Something else here</a></li>
+                          <li class="divider"></li>
+                          <li><a href="#">Separated link</a></li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </div><!-- /.nav-collapse -->
+                </div>
+              </div><!-- /navbar-inner -->
+        </div>
+         <div>
+                <div class = "add-itenary-pane slideout_inner" >
+                    <div class="pure-g-r" id="city-name">
+                        <div class="pure-u-1 itenary-pane">
+
+                            <form class="pure-form pure-form-stacked">
+                            <fieldset>
+                                <input class="city" type="text" placeholder="CITY NAME" id = "city-name" style="height:25px;">
+                            </fieldset>
+                            </form>
+                        </div>
+                    </div>
+                            <a href="#"><img src="{{ url_for ('static',filename='Add.png') }}" id="add" alt="Add" width="20" height="20" /></a>
+                            <a href="#"><img src="{{ url_for ('static',filename='Delete.png') }}" id="del" alt="Add" width="20" height="20"/></a>
+                </div>
+            </div>
+	<h1 class="pure-u-1">Responsive Grids</h1>
+	<script type=text/javascript>
+	$SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+	</script>
+	<script type=text/javascript>
+		$(function() {
+			$('a#calculate').bind('click', function() {
+				$.getJSON($SCRIPT_ROOT + '/add_element', {
+					a: $('input[name="a"]').val(),
+					b: $('input[name="b"]').val()
+					}, function(data) {
+				$("#result").text(data.result);
+				});
+				return false;
+			});
+		});
+	</script>
+	<p><input type=text size=5 name=a> +
+	   <input type=text size=5 name=b> =
+	   <span id=result>?</span>
+	 <p><a href=# id=calculate>calculate server side</a>
+    <input type="text" id="target">
+
+  
+    <h2 class="pure-u">A fully customizable responsive grid</h2>
+    <div class="pure-g" id = "myMap">
+        <div id="mapCanvas">
+        </div>
+    </div>
+  
+</div>
+
+
+<div class="content" id="content">
+
+  
+</div>
+
+
+            <div class="legal pure-g-r">
+    <div class="pure-u-2-5">
+        <div class="l-box">
+            <p class="legal-license">
+                This site is built with &lt;3 using Pure v0.2.0
+            </p>
+            <p class="legal-license">
+                All code on this site is licensed under the <a href="http://yuilibrary.com/license/">BSD License</a> unless stated otherwise.
+            </p>
+        </div>
+    </div>
+
+    <div class="pure-u-1-5">
+        <div class="l-box legal-logo">
+            <a href="http://yuilibrary.com/">
+                <img src="Responsive%20Grids%20%E2%80%93%20Pure_files/logo-footer.png" alt="YUI logo" height="30" width="65">
+            </a>
+        </div>
+    </div>
+
+    <div class="pure-u-2-5">
+        <div class="l-box">
+            <ul class="legal-links pure-g">
+                <li class="pure-u-1-2">
+                    <a href="https://github.com/yui/pure/">GitHub Project</a>
+                </li>
+                <li class="pure-u-1-2">
+                    <a href="http://yuilibrary.com/security/">Security Contact Info</a>
+                </li>
+            </ul>
+
+            <p class="legal-copyright">
+                © 2013 Yahoo! Inc. All rights reserved.
+            </p>
+        </div>
+    </div>
+</div>
+        </div>
+    </div>
+  
+    <script src="{{url_for('static',filename='1.10')}}"></script>
+</body></html>

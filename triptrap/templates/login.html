@@ -1,0 +1,68 @@
+{% extends "layout.html" %}
+{%block navbar%} {{ super() }} {%endblock%}
+{% block content %}
+        <div id="sign_in1">
+        <div class="container">
+            <div class="row">
+                <div class="span12 header">
+                    <h4>Log in to your account</h4>
+                    <p>
+                        There are many variations of passages of Lorem alteration in some form  injected humour these randomised words .</p>
+
+                    <div class="span4 social">
+                        <a href="" class="circle facebook">
+                            <img src="static/img/face.png" height="28" width="14" alt="">
+                        </a>
+                         <a href="" class="circle twitter">
+                            <img src="static/img/twt.png" height="24" width="34" alt="">
+                        </a>
+                         <a href="" class="circle gplus">
+                            <img src="static/img/gplus.png" height="27" width="17" alt="">
+                        </a>
+                    </div>
+                </div>
+
+                <div class="span3 division">
+                    <div class="line l"></div>
+                    <span>or</span>
+                    <div class="line r"></div>
+                </div>
+
+                <div class="span12 footer">
+                    <form method=post action="" >
+                        <input type="text" placeholder="Username" name=username size=30 value="{{ request.form.username }}">
+                        <input type="password" placeholder="Password" name=password size=30>
+                        <input type="submit"  value="sign in">
+                    </form>
+                </div>
+
+                <div class="span12 proof">
+                    <div class="span5 remember">
+                        <label class="checkbox">
+                            <input type="checkbox"> Remember me
+                        </label>
+                        <a href="http://cleancanvas.herokuapp.com/reset.html">Forgot password?</a>
+                    </div>
+
+                    <div class="span3 dosnt">
+                        <span>Don’t have an account?</span>
+                        <a href="http://cleancanvas.herokuapp.com/sign-up.html">Sign up</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+<!-- {# footer starting #} -->
+    {%block footer%}
+    {{ super() }}
+    {% endblock %}
+
+    {%block jsfiles%}
+    {{ super() }}
+    {% endblock %}
+
+
+</body>
+</html>
