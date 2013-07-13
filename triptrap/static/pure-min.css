@@ -155,7 +155,7 @@ min-height : 500px;
 
 .add-itenary-pane{
 	position: fixed;
-	top: 40px;
+	top: 60px;
 
 	left: -500px;
 
@@ -189,6 +189,12 @@ opacity: .5;
 #add:hover
 {
 opacity: .5;
+}
+
+.navbar-tweak{
+	position:fixed !important;
+	z-index:100 !important;
+	width: 85% !important;
 }
 
 /******************************/
