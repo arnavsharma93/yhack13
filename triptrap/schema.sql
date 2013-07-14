@@ -16,8 +16,9 @@ drop table if exists message;
 create table message (
   message_id integer primary key autoincrement,
   author_id integer not null,
-  pub_date integer,
-  votes integer
+  pub_date text,
+  mess_name text,
+  votes integer default 0
 );
 
 drop table if exists element;

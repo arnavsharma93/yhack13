@@ -7,13 +7,20 @@
   var num_markers = 0;
   var num_cities = 0;
   
-  var place_results;
+  var place_results = [];
   var city_markers = [];
   var city_locations = [];
 
   var itenary_places = [];
   var itenary_markers = [];
   var added = [];
+
+  var cities_completed = false;
+  var num_results = 0;
+
+  var city_dist = 0;
+  var city_time = 0;
+  var active_city = null;
   
 
   function initialize() 
@@ -29,13 +36,14 @@
 
      // Load the Map.
     var myOptions = {
-      zoom: 10,
+      zoom: 8,
       center: myLatlng,
       mapTypeId: google.maps.MapTypeId.ROADMAP
     }
     map = new google.maps.Map(document.getElementById("mapCanvas"), myOptions);
     
-    /* BANSAL's AUTOCOMPLETE */
+    /***************************** BANSAL's AUTOCOMPLETE *************************************/
+
         var input = /** @type {HTMLInputElement} */(document.getElementById('target'));
         var searchBox = new google.maps.places.SearchBox(input);
         var markers = [];
@@ -79,7 +87,7 @@
         var bounds = map.getBounds();
         searchBox.setBounds(bounds);
       });
-    /* BANSAL's AUTOCOMPLETE END*/
+    /****************************** BANSAL's AUTOCOMPLETE END ******************************/
 
     autocomplete_city('city-name-input0');
 
@@ -89,10 +97,21 @@
     directionsDisplay.setMap(map);
 
 
+    infowindow = new google.maps.InfoWindow();
+
     // Initialise the marker array.
     for(var i=0; i < max_results; i++)
       markersArray.push(0);
 
+    //get_attractions(myLatlng);
+
+    var myLatlng2 = new google.maps.LatLng(29.0167, 77.3833);
+    // get_attractions(myLatlng2);
+    
+  }
+
+  function get_attractions(myLatlng)
+  {
     // Get tourist attractions.
     var request = {
       location: myLatlng,
@@ -103,8 +122,6 @@
       sensor : false
     };
     // TODO : Filter the results by rating.
-
-    infowindow = new google.maps.InfoWindow();
 
     var service = new google.maps.places.PlacesService(map);
 
@@ -118,15 +135,16 @@
         for (var i = 0; i < max_results; i++) 
         {
             // Create a marker on the place.
-            modal_done[i] = 0;
-            createMarker(results[i], i);
+            modal_done[i + num_results] = 0;
+            createMarker(results[i], i + num_results);
             added.push(false);
             num_markers+=1;
         }
+        num_results += max_results;
       }
       // Calculate TSP of the places.
       //calcRoute(results);
-      place_results = results;
+      //place_results = place_results.concat(results);
 
     });
   }
@@ -203,9 +221,10 @@
 
   function calcCityRoute(places)
   {
-    var directionsDisplay, directionsService;
-    directionsDisplay = new google.maps.DirectionsRenderer();
-    directionsService = new google.maps.DirectionsService();
+    // TODO :: FIX CItY LABELS
+    //var directionsDisplay, directionsService;
+    //directionsDisplay = new google.maps.DirectionsRenderer();
+    //directionsService = new google.maps.DirectionsService();
 
     directionsDisplay.setMap(map);
 
@@ -214,6 +233,8 @@
     var optimal_response = null;
     var jmin = -1;
     var places_copy;
+    var dist = 0;
+    var time = 0;
     
     // Currently, max_results can be max 10. This is limitation of google directions api.
     //for(j=0; j<max_results-1; j++)
@@ -258,13 +279,25 @@
 
         if (status == google.maps.DirectionsStatus.OK) 
         {
-           var dist = 0;
-           var time = 0;
+           
           for(i=0; i<response.routes[0].legs.length; i++)
           {
             dist += response.routes[0].legs[i].distance.value;
             time += response.routes[0].legs[i].duration.value;
           }
+          city_dist = Math.round(dist/1000);
+          city_time = time;
+          var hr = Math.round(city_time/3600);
+          var min = Math.round((city_time%3600)/60);
+
+          
+          $(".distance-cities").html("<i class='icon-road' ></i>" + city_dist+ " km");
+          var str = "<i class='icon-time' ></i>";
+          if(min >= 10)
+            $(".time-cities").html(str + hr+ " hrs " + min + " mins");
+          else
+            $(".time-cities").html(str + hr+ " hrs " + min + " min");
+
         
           done += 1;
           
@@ -306,6 +339,9 @@
         }
       });
     }
+    
+    
+
   }
 
   // Calculates TSP
@@ -427,6 +463,7 @@
     var carousel = "";
     if(!photos)
     {
+        // TODO :: FIX THIS
        photo_url = "Responsive%20Grids%20%E2%80%93%20Pure_files/not_available.jpg";
        carousel = "<div class='item active'> <img src='"+photo_url+"'/></div>";
     }
@@ -446,10 +483,21 @@
           carousel += "<div class='item modal-img-div'> <img class = 'cropped' src='"+photo_url+"'/></div>";
         }
       }
+      console.log("get modal");
+      console.log(place2.name);
+      var out = $.getJSON($SCRIPT_ROOT + '/fetch_flickr', {
+          term: place2.name
+          });
+      
+      
+      console.log("out1");
+      console.log(out);
+      console.log("out2");
+
     }
 
 
-    var str = "<div aria-hidden='true' aria-labelledby='myModalLabel' role='dialog' tabindex='-1' class='modal hide fade' style='display: none;' id='myModal"+ position + "' > \
+    var str = "<div aria-hidden='true' aria-labelledby='myModalLabel' role='dialog' tabindex='-1' class='modal hide fade' style='display: none; height: 85%; overflow:auto !important;' id='myModal"+ position + "' > \
     <table> \
     <tr> \
       <div class = 'pure-g-r'> \
@@ -551,6 +599,7 @@
       //icon : get_icon(j)
     });
     markersArray[nth] = marker;
+    place_results.push(place);
 
     var photos = place.photos;
 
@@ -653,11 +702,29 @@
 
 function add_to_itenary(position)
 {
+
   console.log("ADD click");
+  console.log("position");
+  console.log(position);
+
+  console.log("ACTIVE CITY");
+  
+  active_city = active_city-1;
+  console.log(active_city);
+
+  
+
   added[position] = true;
   
   var place = place_results[position];
+  console.log("place");
   console.log(place);
+  var name = place.name;
+
+  var top_cities = $(".visualise-place-"+active_city);
+  var str = "<li><a href = '#myModal"+ position+"'>" +name + "</a></li>";
+  top_cities.append(str);
+  
   var latlng = place.geometry.location;
 
   var lat = latlng.jb;
@@ -747,11 +814,19 @@ function remove_from_itenary(position)
 }
 function add_itenary()
 {
+  cities_completed = false;
   console.log("DONE CALLED");
+  $("#iter-nav-hidden").attr("id", "iter-nav");
+
+  $("#iter-nav").html(" ");
+
+  $("#iter-nav-hidden2").attr("id", "iter-nav2");
+
   $.getJSON($SCRIPT_ROOT + '/add_message', {
           
           }); 
   console.log(num_cities);
+  console.log(city_locations);
   var input;
   var cities_name = [];
   for(var i=0; i<num_cities+1; i++)
@@ -768,7 +843,11 @@ function add_itenary()
   }
   console.log("CITIES NAME");
   console.log(cities_name);
+  var pane = $(".add-itenary-pane");
+  pane.attr("class", "add-itenary-pane slideout_inner");
+  $("#mapCanvas").css("left", "0px");
   DisplayNav(cities_name);
+  $("#mapCanvas").css("top", "100px");
 }
 
 
@@ -777,18 +856,23 @@ $(document).ready(function(){
 
         $('.add-itenary').click(function () 
         {
-            console.log("toggling");
+            
             if($('.add-itenary-pane').hasClass("slideout_inner"))
             {
               $(".add-itenary-pane").removeClass("slideout_inner");
               $(".add-itenary-pane").addClass("slideout_inner-active");
               $("#mapCanvas").css("left", "235px");
+              $("#iter-nav").css("left", "235px");
+
+              
             }
             else
             {
               $(".add-itenary-pane").removeClass("slideout_inner-active");
               $(".add-itenary-pane").addClass("slideout_inner"); 
               $("#mapCanvas").css("left", "0px");
+              $("#iter-nav").css("left", "0px");
+              
             }
         });
     
@@ -819,12 +903,53 @@ $(document).ready(function(){
 function DisplayNav(itername)
 {
   var count = itername.length;
-  console.log("COUNT");
+  
   console.log(itername);
+  var str ;
+  var j;
   for (var i=1;i<=count;i++)
   {
-    $('#iter-nav').append('<li><a href="#"><span class="badge">'+i+'</span>' + itername[i-1]+'</a></li>');
-
+    j= i-1;
+    str = "<li class = 'label-list dropdown '> \
+    <a class = 'label-city dropdown-toggle' data-toggle='dropdown' onclick='populate_attractions("+i+")'><span class='badge'>"+i+"</span>" + itername[i-1]+"</a>" + 
+    "<ul class='dropdown-menu visualise-place-"+j+" '>" + 
+    "</ul></li>";
+    
+    $('#iter-nav').append(str);
   }
 }
 
+function populate_attractions(pos)
+{
+  active_city = pos;
+
+  if(!cities_completed)
+  {
+    console.log("SETTING NULL");
+    directionsDisplay.setMap(null);
+    cities_completed = true;
+  }
+
+  
+  var position = parseInt(pos) - 1;
+  console.log("SUCCESS");
+  console.log(position);
+  var city = city_locations[position];
+  console.log("CITY");
+  console.log(city);
+  var lat = city.geometry.location.jb;
+  var lon = city.geometry.location.kb;
+  var myLatlng = new google.maps.LatLng(lat, lon);
+  get_attractions(myLatlng);
+  map.setCenter(myLatlng);
+}
+
+function get_followers()
+{
+  var out = $.getJSON($SCRIPT_ROOT + '/show_followed', {
+          
+          });
+  console.log("FRIENDS");
+  console.log(out);
+
+}

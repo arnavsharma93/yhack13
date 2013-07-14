@@ -1,10 +1,10 @@
 /* Sign Up Option 1 */
 #sign_up1{
-	background: url("../img/ocean.jpg")  no-repeat;
+	/*background: url("../img/ocean.jpg")  no-repeat;*/
 	display: block;
 	height: 540px;
 	/*margin-bottom: 90px;*/
-	margin-top: -35px;
+	/*margin-top: -35px;*/
 	-webkit-background-size: cover;
 	-moz-background-size: cover;
 	-o-background-size: cover;
@@ -19,16 +19,17 @@
 }
 #sign_up1 .header h4{
 	font-size: 38px;
-	margin-top: 0;
-	margin-bottom: 25px;
+	margin-top: 30px;
+	margin-bottom: 40px;
 	line-height: 38px;
 	font-weight: 300;
-	text-shadow: 1px 1px 0px #143C4E;
+/*text-shadow: 1px 1px 0px #ECF3F7;*/
 }
 #sign_up1 .header p{
 	font-style: italic;
 	font-size: 17px;
-	margin: 0 0 40px 0;
+	margin-bottom: 80px;
+	margin-top:25px;
 }
 #sign_up1 .header .social{
 	margin: 0 auto 28px;

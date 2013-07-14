@@ -19,6 +19,7 @@ Copyright (c) Nicolas Gallagher and Jonathan Neal
 background : transparent;
 min-height : 500px;
 
+
 }
 #mapCanvas img
 {
@@ -197,6 +198,22 @@ opacity: .5;
 	width: 85% !important;
 }
 
+#iter-nav-hidden
+{
+	visibility: hidden;
+}
+#iter-nav-hidden2
+{
+	visibility: hidden;
+
+}
+#iter-nav2
+{
+	float: right !important;
+	margin-top: 28px !important;
+
+}
+
 /******************************/
 
 #mapCanvas
@@ -210,42 +227,74 @@ opacity: .5;
 
 /* VISHRUT's PLACES NAVIGATION */
 
-.mywizard li {
-position: background !important;
-relative: #f5f5f5x !important;
-            padding-right: 30px !important;
-            padding-left: 5px !important;
+.itenary-path {
+	/*
+    position: relative;
+    */
+    background: #f5f5f5;
+    padding-right: 30px;
+    padding-left: 5px;
 }
- 
-.mywizard li a:after, .mywizard li a:before {
-left: 100% !important;
-border: solid transparent !important;
-content: " " !important;
-height: 0 !important;
-width: 0 !important;
-position: absolute !important;
-          pointer-events: none !important;
+/*
+.label-list .label-city:after, .label-list .label-city:before {
+    left: 100%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
 }
- 
-.mywizard li a:after {
-    border-color: rgba(245, 245, 245, 0) !important;
-    border-left-color: #f5f5f5 !important;
-    border-width: 20px !important;
-top: 50% !important;
-     margin-top: -20px !important;
-     margin-left: -30px !important;
+*/
+
+
+.label-list .label-city:after {
+    border-color: rgba(245, 245, 245, 0);
+    border-left-color: #f5f5f5;
+    border-width: 20px;
+    top: 50%;
+    margin-top: -20px;
+    margin-left: -30px;
 }
- 
-.mywizard li a:before {
-    border-color: rgba(255, 255, 255, 0) !important;
-    border-left-color: #fff !important;
-    border-width: 30px !important;
-top: 50% !important;
-     margin-top: -30px !important;
-     margin-left: -30px !important;
+
+.label-list .label-city:before {
+    border-color: rgba(255, 255, 255, 0);
+    border-left-color: #fff;
+    border-width: 30px;
+    top: 50%;
+    margin-top: -30px;
+    margin-left: -30px;
 }
-.mywizard li .badge {
-    vertical-align: text-bottom !important;
-    padding-top: 3px !important;
+.label-list .badge {
+    vertical-align: text-bottom;
+    padding-top: 3px;
 }
+/*
+@font-face {
+	font-family: Multicolore !important;
+	src: url("Multicolore.otf") format("opentype") !important;
+}
+*/
+body
+{
+	font-family: 'Cabin', sans-serif !important;
+}
+ul.itenary-path li.dropdown:hover ul.dropdown-menu{
+display: block;
+}
+ul.itenary-path li.dropdown:active ul.dropdown-menu{
+display: none;
+}
+
+a.menu:after, .dropdown-toggle:after {
+content: none;
+}
+
+.button-publish
+{
+	text-decoration: none;
+}
+
+
+
 /***************************/

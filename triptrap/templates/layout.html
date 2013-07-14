@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
- <title>Yahoo Hack Day</title>
+ <title>Trip Trap</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -9,7 +9,6 @@
     <link href="{{ url_for('static', filename='css/bootstrap.min.css')}}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/bootstrap-responsive.min.css')}}" rel="stylesheet">
     <link href="  {{ url_for('static', filename='css/bootstrap-overrides.css')}}"  rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='font-awesome/css/font-awesome.min.css')}}"  type="text/css" media="screen">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/theme.css')}}">
     <link href="{{ url_for('static', filename='css/css')}}" rel="stylesheet" type="text/css">
 
@@ -19,120 +18,66 @@
 <script src="{{ url_for('static', filename='js/jquery-latest.js')}}" ></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/sign-in.css')}}"  type="text/css" media="screen">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/sign-up.css')}}"  type="text/css" media="screen">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap2.css')}}"  type="text/css" media="screen">
+    <link rel="stylesheet" href="{{ url_for('static', filename='font-awesome/css/font-awesome.min.css')}}"  type="text/css" media="screen">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/tl.css')}}"  type="text/css" media="screen">
-
 
 </head>
 
 {% block navbar %}
+<body style="padding-top: 0px;  text-decoration:none !important height: 100%; background-color: #131426;">
+<header style="height: 60px !important">
 
-<body style="padding-top: 0px;">
-
-    <div class="navbar navbar-inverse navbar-static-top">
+    <div class="navbar">
       <div class="navbar-inner">
-        <div class="container">
+        <div class="container" style="width:auto;">
             <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </a>
-            <a class="brand" href="static/index.html">
-                <strong>Name of App</strong>
+            <a class="brand" href="#" style="margin-left:50px;">
+                <span style>T</span>
+                <span style>R</span>
+                <span style>I</span>
+                <span style>P</span>
+                <span style>P</span>
+                <span style>Y</span>
+
             </a>
             <div class="nav-collapse collapse">
-                <ul class="nav pull-right">
-                    <li><a href="static/index.html">HOME</a></li>
-                    <li><a href="static/about-us.html">ABOUT US</a></li>
-                    <li class="dropdown">
-                        <a href="static/sign-up.html#" class="dropdown-toggle" data-toggle="dropdown">
-                            PAGES
-                            <b class="caret"></b>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a href="static/features.html">Features</a></li>
-                            <li><a href="static/services.html">Services</a></li>
-                            <li><a href="static/portfolio.html">Portfolio</a></li>
-                            <li><a href="static/portfolio-item.html">Portfolio Item</a></li>
-                            <li><a href="static/coming-soon.html">Coming Soon</a></li>
-                            <li><a href="static/sign-in.html">Sign in</a></li>
-                            <li><a href="./static/css/singup.html">Sign up</a></li>
-                            <li><a href="static/backgrounds.html">Backgrounds</a></li>
-                        </ul>
-                    </li>
-                    <li><a href="static/pricing.html">PRICING</a></li>
-                    <li><a href="static/contact.html">CONTACT US</a></li>
-                    <li><a href="static/blog.html">BLOG</a></li>
-                    <li><a class="btn-header active" href="register">Sign up</a></li>
-                    <li><a class="btn-header" href="/">Sign in</a></li>
+                <ul class="nav " style="margin-left:380px;">
+                    <li style="margin-right:20px;"><a href="static/index.html">HOME</a></li>
+                    <li style="margin-right:20px;"><a href="static/about-us.html">ABOUT US</a></li>
+                    <li style="margin-right:20px;"><a href="static/contact.html">CONTACT US</a></li>
+
+
+
+                    {% if g.user %}
+                </ul>
+                    <ul class="nav pull-right ">
+
+                    <li class="divider-vertical"></li>
+                    <li  ><a href="#">{{g.user.username}}</a></li>
+                    <li  ><a href="logout">Logout</a></li>
+
+                    {% else %}
+
+                    <li ><a class="btn-header" href="register">Sign up</a></li>
+                    <li ><a class="btn-header" href="/">Sign in</a></li>
+                    {% endif%}
+
                 </ul>
             </div>
         </div>
       </div>
     </div>
+</header>
 {% endblock %}
 {% block content %} {%endblock%}
-{%block footer%}
-    <footer id="footer">
-        <div class="container">
-            <div class="row info">
-                <div class="span6 residence">
-                    <ul>
-                        <li>2301 East Lamar Blvd. Suite 140. City, Arlington.</li>
-                        <li>United States, Zip Code TX 76006.</li>
-                    </ul>
-                </div>
-                <div class="span5 touch">
-                    <ul>
-                        <li><strong>P.</strong> 1 817 274 2933</li>
-                        <li><strong>E.</strong><a href="static/sign-up.html#"> bootstrap@twitter.com</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="row credits">
-                <div class="span12">
-                    <div class="row social">
-                        <div class="span12">
-                            <a href="static/sign-up.html#" class="facebook">
-                                <span class="socialicons ico1"></span>
-                                <span class="socialicons_h ico1h"></span>
-                            </a>
-                            <a href="static/sign-up.html#" class="twitter">
-                                <span class="socialicons ico2"></span>
-                                <span class="socialicons_h ico2h"></span>
-                            </a>
-                            <a href="static/sign-up.html#" class="gplus">
-                                <span class="socialicons ico3"></span>
-                                <span class="socialicons_h ico3h"></span>
-                            </a>
-                            <a href="static/sign-up.html#" class="flickr">
-                                <span class="socialicons ico4"></span>
-                                <span class="socialicons_h ico4h"></span>
-                            </a>
-                            <a href="static/sign-up.html#" class="pinterest">
-                                <span class="socialicons ico5"></span>
-                                <span class="socialicons_h ico5h"></span>
-                            </a>
-                            <a href="static/sign-up.html#" class="dribble">
-                                <span class="socialicons ico6"></span>
-                                <span class="socialicons_h ico6h"></span>
-                            </a>
-                            <a href="static/sign-up.html#" class="behance">
-                                <span class="socialicons ico7"></span>
-                                <span class="socialicons_h ico7h"></span>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="row copyright">
-                        <div class="span12">
-                            © 2013 Clean Canvas. All rights reserved. Theme by Detail Canvas.
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
- {%endblock%}
  {%block jsfiles%}
      <script src="./static/js/bootstrap.min.js"></script>
     <script src="./static/js/theme.js"></script>
 {%endblock%}
+</body>
+</html>

@@ -17,7 +17,7 @@
 #blog .post_row{
 	margin-left: 0;
 	margin-bottom: 40px;
-	height: 495px;
+	/*height: 495px;*/
 }
 #blog .lastpost_row{
 	margin-bottom: 0;
@@ -53,18 +53,10 @@
 	min-height: 186px;
 }
 #blog .post_row .post .text{
-
 	margin: 18px auto 0;
-	width: 83%;
+    width: 83%;
 }
 #blog .post_row .post .text h5 {
-	font-size: 1.8em !important ;
-	/*line-height: 1.8em !important ;*/
-	color: #343131 !important;
-	font-family: "MuseoSans-500" !important;
-	display: block !important;
-	/*height: 130px !important;*/
-	overflow: hidden;
 	margin: 0 0 8px 0;
 	font-size: 20px;
 	line-height: 23px;
@@ -145,6 +137,7 @@
 	box-shadow: 0px 1px 5px 1px rgb(216, 216, 216);
 }
 #blog .post_row .post:hover .text h5 a{
+	text-decoration: none;
 	color: #1189D9;
 }
 /*pagination*/
@@ -195,19 +188,11 @@
 		display: none;
 	}
 	#blog .post_row .post .text {
-		font-size: 1.8em;
-		line-height: 1.8em;
-		color: #343131;
-		font-family: "MuseoSans-500";
-		display: block;
-		height: 130px;
-		margin-bottom: 30px;
 		overflow: hidden;
-/*		overflow: hidden;
 		width: 81%;
 		margin: 0 auto 20px;
 		margin-top: 7px;
-*/	}
+	}
 	#blog .post_row .post a.plus_wrapper{
 		display: inline-block;
 		margin: 0;

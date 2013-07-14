@@ -102,11 +102,9 @@ def timeline():
     return render_template('timeline.html', messages=query_db('''
         select message.*, user.* from message, user
         where message.author_id = user.user_id and (
-            user.user_id = ? or
-            user.user_id in (select whom_id from follower
-                                    where who_id = ?))
-        order by message.pub_date desc limit ?''',
-        [session['user_id'], session['user_id'], PER_PAGE]))
+            user.user_id = ?)
+        order by message.pub_date asc limit ?''',
+     [session['user_id'], PER_PAGE]))
 
 
 @app.route('/public')
@@ -115,7 +113,7 @@ def public_timeline():
     return render_template('timeline.html', messages=query_db('''
         select message.*, user.* from message, user
         where message.author_id = user.user_id
-        order by message.pub_date desc limit ?''', [PER_PAGE]))
+        order by message.pub_date asc limit ?''', [PER_PAGE]))
 
 
 @app.route('/<username>')
@@ -134,10 +132,24 @@ def user_timeline(username):
     return render_template('timeline.html', messages=query_db('''
             select message.*, user.* from message, user where
             user.user_id = message.author_id and user.user_id = ?
-            order by message.pub_date desc limit ?''',
+            order by message.pub_date asc limit ?''',
             [profile_user['user_id'], PER_PAGE]), followed=followed,
             profile_user=profile_user)
 
+@app.route('/upvote/<message_id>')
+def upvote(message_id):
+    """Upvote a new message"""
+    if 'user_id' not in session:
+        abort(401)
+    else:
+        lat = request.args.get('a', 0, type=int)
+        new_votes = query_db('''select message.votes from message where message_id = ? ''',message_id)
+        print new_votes
+        new_votes = new_votes[0][0] + 1
+        db = get_db()
+        db.execute(''' update message set votes=? where message.message_id=?  ''', (new_votes,message_id))
+        db.commit()
+        return redirect(url_for('timeline'))
 
 @app.route('/<username>/follow')
 def follow_user(username):
@@ -179,21 +191,24 @@ def go_to_map():
 
 
 # TODO : change the method to POST
-@app.route('/add_message')
+@app.route('/add_message', methods=['POST'])
 def add_message():
     """Registers a new message for the user."""
     if 'user_id' not in session:
         abort(401)
     else:
         db = get_db()
-        db.execute('''insert into message (author_id, pub_date)
-          values (?, ?)''', (session['user_id'],
-                                int(time.time())))
+
+        a = request.form['text']
+        print a
+        db.execute('''insert into message (author_id, pub_date, mess_name)
+          values (?, ?,?)''', (session['user_id'],
+                                str( datetime.now().date() ), a ))
         db.commit()
-	message_id = query_db('''select message.message_id from message where author_id = ? order by message.message_id desc limit ?''',[session['user_id'],1])
+	message_id = query_db('''select message.message_id from message where author_id = ? order by message.message_id asc limit ?''',[session['user_id'],1])
 	session['message_id'] = message_id[0][0]
-    #return render_template('hack.html')
-    return jsonify(result=session['message_id'])
+    return render_template('hack.html')
+    # return jsonify(result=session['message_id'])
 
 
 @app.route('/add_element')
@@ -211,7 +226,7 @@ values (?, ?, ?)''', (session['message_id'],lat,
         db.commit()
     return jsonify(result=session['message_id'])
 
-    
+
 
 @app.route('/del_element')
 def del_element():
@@ -249,7 +264,6 @@ def login():
             return redirect(url_for('timeline'))
     return render_template('login.html', error=error)
 
-
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     """Registers the user."""
@@ -278,7 +292,6 @@ def register():
             flash('You were successfully registered and can login now')
             return redirect(url_for('login'))
     return render_template('register.html', error=error)
-
 
 @app.route('/logout')
 def logout():
