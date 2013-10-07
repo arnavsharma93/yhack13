@@ -47,10 +47,10 @@
             </a>
             <div class="nav-collapse collapse">
                 <ul class="nav " style="margin-left:380px;">
-                    <li style="margin-right:20px;"><a href="static/index.html">HOME</a></li>
+<!--                     <li style="margin-right:20px;"><a href="static/index.html">HOME</a></li>
                     <li style="margin-right:20px;"><a href="static/about-us.html">ABOUT US</a></li>
                     <li style="margin-right:20px;"><a href="static/contact.html">CONTACT US</a></li>
-
+ -->
 
 
                     {% if g.user %}
@@ -62,7 +62,9 @@
                     <li  ><a href="logout">Logout</a></li>
 
                     {% else %}
-
+                    </ul>
+                    <ul class="nav pull-right ">
+                    <li class="divider-vertical"></li>
                     <li ><a class="btn-header" href="register">Sign up</a></li>
                     <li ><a class="btn-header" href="/">Sign in</a></li>
                     {% endif%}

@@ -1,0 +1,162 @@
+{% extends "layout.html" %}
+{%block navbar%} {{ super() }} {%endblock%}
+{% block content %}
+
+
+<script>
+function EnableButton()
+{
+    var x = document.getElementById("SubmitButton");
+    if(document.getElementById("text").value!="")
+    {
+        x.setAttribute("class","btn btn-success btn-large");
+        x.removeAttribute("disabled");
+    }
+    else
+    {
+        x.setAttribute("class","btn btn-success btn-large disabled");
+        x.setAttribute("disabled","disabled");
+
+    };
+}
+function ShowModal(id)
+{
+        {% for m in messages %}
+            if (id === '{{m.message_id}}')
+            {
+                    console.log(id);
+                    document.getElementById("myModalLabel").innerHTML = '{{m.mess_name}}';
+                    $('#myModal').modal();
+
+            };
+         {% endfor %}
+
+}
+</script>
+
+
+<script type=text/javascript>
+    $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+</script>
+  
+
+
+<form action="{{ url_for('go_to_map') }}" method=post class="form-inline" style="margin-top: 30px;">
+
+    <div class="input-append" style="margin-left: 30%;margin-top: 40px">
+
+  <input class="span5" id=text name=text type="text" style="height:34px;" placeholder="Enter the name of the journey here" onkeyup="EnableButton();" value="">
+ <button id="SubmitButton" type="submit" class="btn btn-success btn-large disabled" disabled="disabled" ><i class="icon-white icon-plus-sign"></i>  New journey</button>
+
+</div>
+
+    <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel"></h3>
+        </div>
+        <div class="modal-body">
+            <p>One fine body…</p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+            <!-- <button class="btn btn-primary">Save changes</button> -->
+        </div>
+    </div>
+
+
+  </form>
+
+
+  <div id="blog">
+    <div class="container">
+        <div class="section_header">
+            <h3>Trippy Feed</h3>
+
+        </div>
+
+        {%for message in messages%}
+        <!-- Post -->
+        {% if message.message_id % 3 == 1%}
+        
+            
+
+        <div class="row post_row">
+            {%endif%}
+            {% if message.message_id % 3 == 0 %}
+            <div class="span4 post last">
+                {% else %}
+                <div class="span4 post">
+                    {% endif %}
+
+
+                    
+
+                    
+
+                    <!-- <a href="{{ url_for('upvote', message_id=message.message_id) }}"><i class=" icon-thumbs-up icon-large pull-right icon-border" id = "upvote{{message.message_id}}"> &nbsp; {{message.votes}}</i></a>
+
+
+ -->
+                    <a href="{{ url_for('upvote', message_id=message.message_id) }}"><i class=" icon-thumbs-up icon-large pull-right icon-border"> &nbsp; {{message.votes}}</i></a>
+
+                    <div class="text">
+
+                        <!-- Used to store some data from python to javascript -->
+                        <input type = "hidden" id = "msg_id_hidden{{message.message_id}}" value = "{{message.message_id}}">
+                        <input type = "hidden" id = "cities_string{{message.message_id}}" value = "{{message.cities_string}}">
+                        <!---->
+
+
+                        <h5><a onclick=ShowModal('{{message.message_id}}'); style="cursor:pointer;">{{message.mess_name}} </a></h5>
+                        <span class="date">{{message.pub_date}}</span>
+                        
+                        <!-- div which stores cities name populated by JS -->
+                        <div id = "cities{{message.message_id}}" > </div>
+
+                        
+                        <script >
+                        
+                            msg_id = document.getElementById("msg_id_hidden{{message.message_id}}").value;
+                            msg_id = parseInt(msg_id);
+                            console.log(msg_id);
+
+                            elements = $.getJSON($SCRIPT_ROOT + '/itinerary', {
+                                  message_id: msg_id
+                                  });
+
+                            
+                            
+                            console.log("cities_string");
+                            cities_string = document.getElementById("cities_string{{message.message_id}}").value;
+                            cities = cities_string.split(",");
+                            
+                            str = "";
+                            for(var i=0; i<cities.length; i++)
+                            {
+                                str += "<span>" + cities[i] + "</br></span>";
+                            }
+                            
+                            document.getElementById("cities{{message.message_id}}").innerHTML= str;
+                        </script>
+                        
+
+                        
+                    </div>
+
+                    <div class="author_box">
+                        <h6>{{ message.username}}</h6>
+                        <p><img src="{{ message.email|gravatar(size=24) }}"></p>
+                    </div>
+
+                </div>
+                {% if message.message_id % 3 == 0%}
+            </div>
+            {%endif%}
+
+            {%endfor%}
+
+        </div>
+    </div>
+</div>
+{%endblock%}

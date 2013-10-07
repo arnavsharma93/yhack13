@@ -90,6 +90,20 @@ def before_request():
         g.user = query_db('select * from user where user_id = ?',
                           [session['user_id']], one=True)
 
+@app.route('/itinerary')
+def itinerary():
+    """ Displays the itenary from a message"""
+    message_id = request.args.get('message_id', 0, type=int)
+    print message_id
+    print type(message_id)
+    elements = query_db("select * from element where element.message_id = ?",
+                         [message_id])
+    print "elements", elements
+    for i in range(len(elements)):
+        elements[i] = list(elements[i])
+
+    return jsonify(result = elements)
+
 
 @app.route('/timeline')
 def timeline():
@@ -142,14 +156,79 @@ def upvote(message_id):
     if 'user_id' not in session:
         abort(401)
     else:
-        lat = request.args.get('a', 0, type=int)
         new_votes = query_db('''select message.votes from message where message_id = ? ''',message_id)
         print new_votes
-        new_votes = new_votes[0][0] + 1
+        if not new_votes:
+            new_votes = 0
+        else:
+            new_votes = new_votes[0][0] + 1
         db = get_db()
         db.execute(''' update message set votes=? where message.message_id=?  ''', (new_votes,message_id))
         db.commit()
         return redirect(url_for('timeline'))
+
+@app.route('/pin', methods = 'GET')
+def add_note():
+    """Adds the note to itinerary"""
+    if not g.user:
+        abort(401)
+    note = request.args.get('note', "default_note", type=str)
+    db = get_db()
+    db.execute(''' update element set note=? where message.message_id=?  ''', (new_votes,message_id))
+    db.commit()
+
+
+@app.route('/justdial', methods=['GET'])
+def justdial():
+    import requests
+    from ast import literal_eval
+
+    print "In justdial"
+
+    base_url = 'http://hack2013.justdial.com/index.php'
+    event_token = 'R1nev3n7t0k3nd0m'
+    token = 'o7YMSTkojMvx8qb'
+
+    city = request.args.get('city_name', "hyderabad", type=str)
+    area = request.args.get('area_name', "gachibowli",  type=str)
+    query = request.args.get('query', "cab", type=str)
+
+
+    def get_results(base_url=base_url,event_token=event_token,token=token,query=query,city=city,area=area):
+        query = query.replace(' ','+')
+        area = area.replace(' ','+')
+        query_string = "?event_token=%s&token=%s&q=%s&city=%s&area=%s&geocodes=&num_res=2" %(event_token,token,query,city,area)
+        
+        r = requests.get(base_url+query_string, timeout=5)
+        r = literal_eval(r.text)
+        max_rating = -1.0
+        key_max = 0
+        for i in range(0,len(r)):
+            if r[r.keys()[i]]['avg_rating'] > max_rating:
+                key_max = r.keys()[i]
+        
+        return_list = []
+        for el in r[key_max]:
+            return_list.append([r[key_max][el]])
+        somelist = []
+        for el in return_list:
+            somelist.append(str(el[0]))
+        print [somelist]
+        return [somelist]
+        
+
+
+
+        
+    print "HERE"
+
+    try :
+        return jsonify(result=get_results(query=query))
+    except :
+        print "Excepting"
+        return jsonify(result="")
+
+
 
 @app.route('/<username>/follow')
 def follow_user(username):
@@ -182,16 +261,20 @@ def unfollow_user(username):
     flash('You are no longer following "%s"' % username)
     return redirect(url_for('user_timeline', username=username))
 
-@app.route('/map', methods=['GET'])
+@app.route('/map', methods=['GET', 'POST'])
 def go_to_map():
     """
         Go to map form share page.
     """
+    if request.method == 'POST': 
+        a = request.form['text']
+        session['trip_name'] = a
+        print  "Trip name", a
+
     return render_template('hack.html')
 
-
 # TODO : change the method to POST
-@app.route('/add_message', methods=['POST'])
+@app.route('/add_message', methods=['POST', 'GET'])
 def add_message():
     """Registers a new message for the user."""
     if 'user_id' not in session:
@@ -199,15 +282,27 @@ def add_message():
     else:
         db = get_db()
 
-        a = request.form['text']
-        print a
-        db.execute('''insert into message (author_id, pub_date, mess_name)
-          values (?, ?,?)''', (session['user_id'],
-                                str( datetime.now().date() ), a ))
+        print request.args
+
+        if 'trip_name' not in session.keys() or session['trip_name'] == '':
+            print "no trip name entered"
+            session['trip_name'] = "Default"
+
+        a = session['trip_name']
+        cities_string = session['cities_string']
+        
+        db.execute('''insert into message (author_id, pub_date, mess_name, cities_string)
+          values (?, ?, ?, ?)''', (session['user_id'],
+                                str( datetime.now().date() ), a, cities_string ))
         db.commit()
-	message_id = query_db('''select message.message_id from message where author_id = ? order by message.message_id asc limit ?''',[session['user_id'],1])
+	message_id = query_db('''select message.message_id from message where message.author_id = ? order by message.message_id desc limit ?''',[session['user_id'],1])
+
+
 	session['message_id'] = message_id[0][0]
-    return render_template('hack.html')
+    print "message_id", message_id
+    session['trip_name'] = ''
+    session['cities_string'] = ''
+    return redirect(url_for('timeline'))
     # return jsonify(result=session['message_id'])
 
 
@@ -219,13 +314,33 @@ def add_element():
     else:
         lat = request.args.get('a', "0", type=str)
         lng = request.args.get('b', "0", type=str)
+        name = request.args.get('name', "default_name", type=str)
+        message_id = query_db('''select message.message_id from message where message.author_id = ? order by message.message_id desc limit ?''',[session['user_id'],1])
+        print message_id
+        if message_id == []:
+            session['message_id'] = 1
+        else:
+            session['message_id'] = message_id[0][0] + 1
+        print "name", name
         db = get_db()
-        db.execute('''insert into element (message_id, lat, lng)
-values (?, ?, ?)''', (session['message_id'],lat,
-                                lng))
+        db.execute('''insert into element (message_id, lat, lng, name)
+                    values (?, ?, ?, ?)''', (session['message_id'],lat,
+                                lng, name))
         db.commit()
+        print "SESSION", session['message_id']
     return jsonify(result=session['message_id'])
 
+@app.route('/save-cities')
+def save_cities():
+    """Collects the cities list from javascript and stuffs into
+    memory with some pre processing """
+
+    cities_string = request.args.get('cities_string', 'default_cities_string', type=str)
+    session['cities_string'] = cities_string
+    # db = get_db()
+    # db.execute('''insert into message (cities_string) values (?)''', [cities_string])
+    # db.commit()
+    return jsonify(result=session['cities_string'])
 
 
 @app.route('/del_element')

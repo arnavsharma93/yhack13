@@ -17,7 +17,7 @@ Copyright (c) Nicolas Gallagher and Jonathan Neal
 
 #mapCanvas {
 background : transparent;
-min-height : 500px;
+min-height : 575px;
 
 
 }
@@ -178,6 +178,32 @@ min-height : 500px;
 	height:100px;
 	margin-bottom: 6px;
 }
+.justdial-search-pane{
+	position: fixed;
+	top: 60px;
+
+	left: -500px;
+
+	background: #515151;
+
+
+	width: 200px;
+	padding: 25px;
+	height: 530px;
+	    -webkit-transition-duration: 0.3s;
+	    -moz-transition-duration: 0.3s;
+        -o-transition-duration: 0.3s;
+        transition-duration: 0.3s;
+        text-align: left;
+        -webkit-border-radius: 0 0 5px 0;
+        -moz-border-radius: 0 0 5px 0;
+        border-radius: 0 0 5px 0;
+}
+.justdial-search-pane textarea {
+	width: 190px;
+	height:100px;
+	margin-bottom: 6px;
+}
 .slideout_inner-active
 {
    left: 150px !important;
@@ -209,11 +235,29 @@ opacity: .5;
 }
 #iter-nav2
 {
-	float: right !important;
-	margin-top: 28px !important;
-
+	margin-left: 650px;
+	/*float :right;*/
 }
-
+#logout-btn
+{
+	float :right !important;
+}
+#justdial-icon
+{
+	height :27px;
+	width :27px;
+	top :2px;
+	float: right;
+	z-index: 10px;
+}
+.justdial-heading
+{
+	color :white !important;
+}
+.city-slideout
+{
+	font-size: 17px;
+}
 /******************************/
 
 #mapCanvas
@@ -295,6 +339,13 @@ content: none;
 	text-decoration: none;
 }
 
-
+ .just-dial-hide
+{
+       visibility: hidden !important;
+}
+.just-dial
+{
+       visibility: visible !important;
+}
 
 /***************************/

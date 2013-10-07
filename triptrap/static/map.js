@@ -12,6 +12,7 @@
   var city_locations = [];
 
   var itenary_places = [];
+  var itenary_places_city_no = [];
   var itenary_markers = [];
   var added = [];
 
@@ -21,7 +22,9 @@
   var city_dist = 0;
   var city_time = 0;
   var active_city = null;
-  
+  var current_place;
+  var ret;
+
 
   function initialize() 
   {
@@ -130,6 +133,7 @@
       if (status == google.maps.places.PlacesServiceStatus.OK) 
       {
         // TODO : First max_results results are taken. This should be done with rating.
+        
         if(max_results > results.length)
           max_results = results.length;
         for (var i = 0; i < max_results; i++) 
@@ -453,12 +457,8 @@
   }
   function get_modal(place2, position)
   {
-    console.log("IN MODAL");
-    console.log(place2);
     var photos = place2.photos;
     var rating = place2.rating * 20;
-    console.log("RATING");
-    console.log(rating);
     var i;
     var carousel = "";
     if(!photos)
@@ -483,16 +483,17 @@
           carousel += "<div class='item modal-img-div'> <img class = 'cropped' src='"+photo_url+"'/></div>";
         }
       }
-      console.log("get modal");
-      console.log(place2.name);
-      var out = $.getJSON($SCRIPT_ROOT + '/fetch_flickr', {
-          term: place2.name
-          });
+      
+      // Udaoing Flickr
+
+      // var out = $.getJSON($SCRIPT_ROOT + '/fetch_flickr', {
+      //     term: place2.name
+      //     });
       
       
-      console.log("out1");
-      console.log(out);
-      console.log("out2");
+      // console.log("out1");
+      // console.log(out);
+      // console.log("out2");
 
     }
 
@@ -638,18 +639,16 @@
     {
       var str = get_infobox(place, photo_tag, nth);
       infowindow.setContent(str);
-      console.log("INFOWINDOW");
+      
       var parent = $('#infowindow').parent();
       parent.attr("style", "overflow:hidden !important;");
-      console.log($('#infowindow').parent());
+      
       infowindow.open(map, this);
     });
     google.maps.event.addListener(marker, 'click', function() 
     {
       var str = get_infobox(place, photo_tag, nth);
       infowindow.setContent(str);
-      console.log("INFOWINDOW");
-      console.log($('#infowindow').parent());
       infowindow.open(map, this);
     });
   }
@@ -675,13 +674,11 @@
                                             "<a class = 'infobox-heading' data-toggle='modal' href='#myModal" + nth + "'>" +
                                             photo_tag +
                                     "</div>"+
-     
                                     "<div class = 'pure-u-2-3' style='overflow:hidden !important;'>"+
                                     place.name +
                                     "</div>"+
                                             "</a>"+
                             "</div></tr>"+
-     
                             "<tr>"+
                             "<div class = 'pure-g-r' style='overflow:hidden !important;'>"+
                                     "<div class = 'pure-u-2-5' style='overflow:hidden !important;'>"+
@@ -693,53 +690,73 @@
                                             "</button>"+
                                             "</div>"+
                                     "<div class = 'pure-u-3-5' style='overflow:hidden !important;'>"+
-                                    "<input type='text' placeholder='Duration (optional)' style = 'width:130px;'>" +
                                     "</div>" +
                             "</tr>"+
                     "</tbody></table>";
     return str;
   }
 
+function get_place_ul(name)
+{
+  var short_name;
+  if (name.length > 17)
+  {
+    short_name = name.substring(0, 15);
+    short_name += "..";
+  }
+  else
+    short_name = name;
+
+  str = "<li><a onclick=\"open_justdial_search('"+ name+ "')\">" + short_name + "<img id ='justdial-icon' src='static/justdial_icon.jpg'></a></li>";
+  console.log(str);
+  return str;
+
+}
+
 function add_to_itenary(position)
 {
 
   console.log("ADD click");
-  console.log("position");
-  console.log(position);
-
-  console.log("ACTIVE CITY");
   
-  active_city = active_city-1;
-  console.log(active_city);
+  active_city2 = active_city-1;
 
+  console.log("active_city");
+  console.log(active_city2);
   
-
   added[position] = true;
   
   var place = place_results[position];
-  console.log("place");
-  console.log(place);
+  
   var name = place.name;
+  console.log("name");
+  console.log(name);
 
-  var top_cities = $(".visualise-place-"+active_city);
-  var str = "<li><a href = '#myModal"+ position+"'>" +name + "</a></li>";
-  top_cities.append(str);
+  ul = document.getElementById("city-" + parseInt(active_city2, 10));
+  ul.innerHTML += get_place_ul(name);
+
+  // var top_cities = $(".visualise-place-"+active_city2);
+  // var str = "<li><a href = '#myModal"+ position+"'>" +name + "</a></li>";
+  // top_cities.append(str);
   
   var latlng = place.geometry.location;
 
-  var lat = latlng.jb;
-  var lon = latlng.kb;
+  var lat = latlng.pb;
+  var lon = latlng.qb;
 
-  $.getJSON($SCRIPT_ROOT + '/add_element', {
+  abc = $.getJSON($SCRIPT_ROOT + '/add_element', {
           a: lat,
-          b: lon
+          b: lon,
+          name : place.name,
+          rating : place.rating
           });
 
+  // abc has retured json.
+
   itenary_places.push(place);
+  itenary_places_city_no.push(active_city2);
   
   itenary_markers.push(markersArray[position]);
-  console.log("itenary_markers");
-  console.log(itenary_markers);
+  
   $("#add-to-itenary"+position).attr("class", "pure-button pure-button-disabled  pure-button-xsmall");
   $("#remove-from-itenary"+position).attr("class", "pure-button pure-button-primary pure-button-xsmall");
 
@@ -756,14 +773,13 @@ function remove_from_itenary(position)
   if(itenary_places.length===0)
     return;
 
-  console.log("RM click");
   
   var place = place_results[position];
-  console.log(place);
+  
   var latlng = place.geometry.location;
 
-  var lat = latlng.jb;
-  var lon = latlng.kb;
+  var lat = latlng.pb;
+  var lon = latlng.qb;
 
   $.getJSON($SCRIPT_ROOT + '/del_element', {
           a: lat,
@@ -788,25 +804,18 @@ function remove_from_itenary(position)
   itenary_markers = itenary_markers_copy;
   itenary_places = itenary_places_copy;
 
-  console.log("I");
-  console.log(i);
-
-  console.log(itenary_places_copy);
+  
   $("#remove-from-itenary"+position).attr("class", "pure-button pure-button-disabled  pure-button-xsmall");
   $("#add-to-itenary"+position).attr("class", "pure-button pure-button-primary pure-button-xsmall");
   if(itenary_places.length >=2)
   {
     
-    console.log("SETTING MAP");
-    console.log(directionsDisplay);
     calcRoute(itenary_places);
 
   }
   if(itenary_places.length < 2)
   {
     directionsDisplay.setMap(null);
-    console.log("SETTING NULL");
-    console.log(directionsDisplay);
     itenary_markers[0].setIcon('http://maps.gstatic.com/mapfiles/ms2/micons/red-dot.png');
 
   }
@@ -816,19 +825,17 @@ function add_itenary()
 {
   cities_completed = false;
   console.log("DONE CALLED");
+
   $("#iter-nav-hidden").attr("id", "iter-nav");
 
   $("#iter-nav").html(" ");
 
   $("#iter-nav-hidden2").attr("id", "iter-nav2");
 
-  $.getJSON($SCRIPT_ROOT + '/add_message', {
-          
-          }); 
-  console.log(num_cities);
-  console.log(city_locations);
+
   var input;
   var cities_name = [];
+  var cities_str = "", temp;
   for(var i=0; i<num_cities+1; i++)
   {
     input = $('#city-name-input'+i);
@@ -839,15 +846,46 @@ function add_itenary()
     else
     {
       cities_name.push(input.val());
+      temp = input.val().split(","); 
+      cities_str += temp[0];
+      cities_str += ",";
     }
   }
+  cities_str = cities_str.substring(0, cities_str.length - 1);
   console.log("CITIES NAME");
-  console.log(cities_name);
+  console.log(cities_str);
+
+  $.getJSON($SCRIPT_ROOT + '/save-cities', {
+          cities_string: cities_str,
+          });
+
+  cities = cities_str.split(",");
+  console.log("cities");
+  console.log(cities);
+  document.getElementById("left-pane-cities").innerHTML = "";
+  for(var i = 0 ; i < cities.length; i++)
+  {
+    document.getElementById("left-pane-cities").innerHTML+= "<ul id = 'city-" + parseInt(i, 10) + 
+    "'><li data-placement='right' style='cursor:pointer;' data-toggle='tooltip' data-original-title='Tooltip on right' class='city-slideout slideout_inner'><a  onclick='populate_attractions("+
+      parseInt(i+1, 10)+")'>" + cities[i] + 
+    "</a></li></ul>";
+  }
+  for(var i = 0; i< itenary_places.length; i++)
+  {
+    ul = document.getElementById("city-" + parseInt(itenary_places_city_no[i], 10)) ;
+    console.log(ul);
+
+    ul.innerHTML += get_place_ul(itenary_places[i].name);
+  }
+
+
+
+
   var pane = $(".add-itenary-pane");
   pane.attr("class", "add-itenary-pane slideout_inner");
   $("#mapCanvas").css("left", "0px");
-  DisplayNav(cities_name);
-  $("#mapCanvas").css("top", "100px");
+  //DisplayNav(cities_name);
+  //$("#mapCanvas").css("top", "100px");
 }
 
 
@@ -856,15 +894,12 @@ $(document).ready(function(){
 
         $('.add-itenary').click(function () 
         {
-            
             if($('.add-itenary-pane').hasClass("slideout_inner"))
             {
               $(".add-itenary-pane").removeClass("slideout_inner");
               $(".add-itenary-pane").addClass("slideout_inner-active");
               $("#mapCanvas").css("left", "235px");
               $("#iter-nav").css("left", "235px");
-
-              
             }
             else
             {
@@ -875,7 +910,8 @@ $(document).ready(function(){
               
             }
         });
-    
+
+        
         $("#add").click(function () {
             num_cities += 1;
             $(".itenary-pane:first").clone().appendTo("#city-name"); 
@@ -919,8 +955,43 @@ function DisplayNav(itername)
   }
 }
 
+function open_justdial_search(name)
+{
+  document.getElementById('justdial-result_name').innerHTML = "";
+  document.getElementById('justdial-result_phno').innerHTML = "";
+  document.getElementById('justdial-result_rating').innerHTML = "";
+  $("#just-dial-btn").addClass("just-dial-hide");
+  $("#just-dial-btn").removeClass("just-dial"); 
+
+  if($('.justdial-search-pane').hasClass("slideout_inner"))
+    {
+      $(".justdial-search-pane").removeClass("slideout_inner");
+      $(".justdial-search-pane").addClass("slideout_inner-active");
+      $("#mapCanvas").css("left", "235px");
+      $("#iter-nav").css("left", "235px");
+    }
+    else
+    {
+      $(".justdial-search-pane").removeClass("slideout_inner-active");
+      $(".justdial-search-pane").addClass("slideout_inner"); 
+      $("#mapCanvas").css("left", "0px");
+      $("#iter-nav").css("left", "0px");
+      
+    }
+    console.log('itenary_places');
+  for(var i=0; i<itenary_places.length; i++)
+  {
+    
+    if(itenary_places[i].name === name)
+    {
+      current_place = i;
+      break;
+    }
+  }
+}
 function populate_attractions(pos)
 {
+
   active_city = pos;
 
   if(!cities_completed)
@@ -934,12 +1005,14 @@ function populate_attractions(pos)
   var position = parseInt(pos) - 1;
   console.log("SUCCESS");
   console.log(position);
+  console.log(city_locations);
   var city = city_locations[position];
   console.log("CITY");
   console.log(city);
-  var lat = city.geometry.location.jb;
-  var lon = city.geometry.location.kb;
+  var lat = city.geometry.location.pb;
+  var lon = city.geometry.location.qb;
   var myLatlng = new google.maps.LatLng(lat, lon);
+
   get_attractions(myLatlng);
   map.setCenter(myLatlng);
 }
@@ -953,3 +1026,69 @@ function get_followers()
   console.log(out);
 
 }
+
+function search_justdial()
+{
+  console.log("IN SEARCH JUSTDIAL");
+  
+  var city_name = city_locations[itenary_places_city_no[current_place]].name;
+  var area_name = itenary_places[current_place].name;
+  var query = document.getElementById('justdial-name-input0').value;
+
+  if(city_name === null)
+    city_name = "hyderabad";
+  if(area_name === null)
+    area_name = "gachibowli";
+  if(query === '')
+    return;
+
+  console.log(city_name);
+  console.log(area_name);
+  console.log(query);
+
+  $.getJSON($SCRIPT_ROOT + '/justdial', {
+          city_name : city_name,
+          area_name : area_name,
+          query : query,
+          }).success(function(data) {
+
+              console.log(data.result);
+              document.getElementById('justdial-result_name').innerHTML = "";
+              document.getElementById('justdial-result_phno').innerHTML = "";
+              document.getElementById('justdial-result_rating').innerHTML = "";
+              
+              if(!data.result[0] || (!data.result[0][2]) )
+                name = "Not found";
+              else
+                name = data.result[0][2];
+              
+              if(!data.result[0] || (!data.result[0][3]))
+                phno = "Not found";
+              else
+                phno = data.result[0][3];
+
+
+              if(!data.result[0] || (!data.result[0][4]))
+                rating = "Not found";
+              else
+                rating = data.result[0][4];
+
+
+
+              document.getElementById('justdial-result_name').innerHTML += "Name :" + name;
+              document.getElementById('justdial-result_phno').innerHTML += "Phone No :" + phno;
+              document.getElementById('justdial-result_rating').innerHTML += "Rating :" + rating;
+              $("#just-dial-btn").removeClass("just-dial-hide");
+              $("#just-dial-btn").addClass("just-dial"); 
+              
+              return data;
+          });
+
+}
+function add_justdial_info()
+{
+  $("#just-dial-btn").addClass("disabled"); 
+  var x = document.getElementById("just-dial-btn");
+  x.setAttribute("disabled","disabled");
+}
+
