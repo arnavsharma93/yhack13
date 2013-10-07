@@ -115,6 +115,8 @@
 
   function get_attractions(myLatlng)
   {
+    console.log("Get attractions");
+    console.log(myLatlng);
     // Get tourist attractions.
     var request = {
       location: myLatlng,
@@ -130,6 +132,9 @@
 
     service.nearbySearch(request, function(results, status) 
     {
+      console.log("Status of Places Services");
+      console.log(status);
+      console.log(request);
       if (status == google.maps.places.PlacesServiceStatus.OK) 
       {
         // TODO : First max_results results are taken. This should be done with rating.
@@ -740,8 +745,8 @@ function add_to_itenary(position)
   
   var latlng = place.geometry.location;
 
-  var lat = latlng.pb;
-  var lon = latlng.qb;
+  var lat = latlng.lb;
+  var lon = latlng.mb;
 
   abc = $.getJSON($SCRIPT_ROOT + '/add_element', {
           a: lat,
@@ -778,8 +783,8 @@ function remove_from_itenary(position)
   
   var latlng = place.geometry.location;
 
-  var lat = latlng.pb;
-  var lon = latlng.qb;
+  var lat = latlng.lb;
+  var lon = latlng.mb;
 
   $.getJSON($SCRIPT_ROOT + '/del_element', {
           a: lat,
@@ -1003,14 +1008,14 @@ function populate_attractions(pos)
 
   
   var position = parseInt(pos) - 1;
-  console.log("SUCCESS");
+  console.log("SUCCESSSS");
   console.log(position);
   console.log(city_locations);
   var city = city_locations[position];
   console.log("CITY");
   console.log(city);
-  var lat = city.geometry.location.pb;
-  var lon = city.geometry.location.qb;
+  var lat = city.geometry.location.lb;
+  var lon = city.geometry.location.mb;
   var myLatlng = new google.maps.LatLng(lat, lon);
 
   get_attractions(myLatlng);
